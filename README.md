@@ -31,7 +31,7 @@ This repository contains a proof-of-concept Flask application that transcribes a
     - Start the Flask server:
         
         ```bash
-        python Flask-endpoint.py
+        flask --app Flask-endpoint run
         ```
         
     - The server will run at `http://localhost:5000`.
