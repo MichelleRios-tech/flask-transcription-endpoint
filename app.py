@@ -26,3 +26,7 @@ def transcribe_audio():
         transcription = " ".join(segment.text for segment in segments)
 
         return jsonify({"transcription": transcription})
+
+
+if __name__ == '__main__':
+    app.run()
