@@ -12,7 +12,7 @@ This repository contains a proof-of-concept Flask application that transcribes a
     
     ```bash
     https://github.com/MichelleRios-tech/flask-transcription-endpoint.git
-    cd flask-whisper-transcription-endpoint
+    cd flask-transcription-endpoint
     ```
     
 3. **Install Dependencies**:
