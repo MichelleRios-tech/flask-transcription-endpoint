@@ -1,0 +1,2 @@
+faster_whisper==1.0.3
+Flask==3.0.3
