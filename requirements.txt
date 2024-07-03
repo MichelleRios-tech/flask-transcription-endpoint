@@ -1,3 +1,4 @@
 faster_whisper==1.0.3
 gunicorn
 Flask==3.0.3
+torch
