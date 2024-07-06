@@ -1,40 +1,52 @@
 import os
-import torch
 
 from flask import Flask, request, jsonify
 from faster_whisper import WhisperModel
+from pytube import YouTube
 
 app = Flask(__name__)
 model_size = "large-v3"
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-
-compute_type = "int8" if device == "cpu" else "float16"
-
-model = WhisperModel(model_size, device=device, compute_type=compute_type)
+model = WhisperModel(model_size, device="cuda", compute_type="float16")
 
 
 @app.route("/transcribe", methods=["POST"])
 def transcribe_audio():
-    if "audio" not in request.files:
-        return jsonify({"error": "No audio file provided"}), 400
+    print("Transcribing audio...", request.files, request.form)
+    
+    audio_file = request.files.get("audio")
+    audio_link = request.form.get("link")
 
-    audio_file = request.files["audio"]
-    filename = audio_file.filename + ".mp3"
+    if not audio_file and not audio_link:
+        print("No audio file provided")
+        return jsonify({"error": "No audio file provided"}), 401
 
     if audio_file:
-        audio_file.save(filename)
+        transcription = transcribe_from_file(audio_file)
+    else:
+        transcription = transcribe_from_youtube(audio_link)
 
-        segments, _ = model.transcribe(filename, beam_size=5)
-        os.remove(filename)
-        print(f"File {filename} removed successfully.")
-        transcription = " ".join(segment.text for segment in segments)
+    return jsonify({"transcription": transcription})
 
-        return jsonify({"transcription": transcription})
+def transcribe_from_file(audio_file):
+    print("Transcribing audio file", audio_file.filename)
+    filename = audio_file.filename + ".mp3"
+    audio_file.save(filename)
 
-@app.route("/", methods=["GET"])
-def hello():
-    return "<h1>Hello, World!</h1>"
+    return generate_transcription(filename)
+
+def generate_transcription(filename):
+    segments, _ = model.transcribe(filename, beam_size=5)
+    os.remove(filename)
+    print(f"File {filename} removed successfully.")
+    return " ".join(segment.text for segment in segments)
+
+def transcribe_from_youtube(link):
+    print("Downloading audio from YouTube link", link)
+    yt = YouTube(link)
+    audio_file = yt.streams.filter(only_audio=True).first().download()
+
+    return generate_transcription(audio_file)
 
 if __name__ == '__main__':
     app.run()
