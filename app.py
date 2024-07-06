@@ -19,7 +19,7 @@ def transcribe_audio():
 
     if not audio_file and not audio_link:
         print("No audio file provided")
-        return jsonify({"error": "No audio file provided"}), 401
+        return jsonify({"error": "No audio file provided"}), 400
 
     if audio_file:
         transcription = transcribe_from_file(audio_file)
