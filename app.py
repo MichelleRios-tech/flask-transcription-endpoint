@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
 from faster_whisper import WhisperModel
 from pytube import YouTube
+import json
 
-from services import transcription_service
+from services import transcription_service, ollama_service
 
 app = Flask(__name__)
 
@@ -21,8 +22,13 @@ def transcribe_audio():
         transcription = transcription_service.transcribe_from_file(audio_file)
     else:
         transcription = transcription_service.transcribe_from_youtube(audio_link)
+    
+    summary = ollama_service.get_summary(transcription)
 
-    return jsonify({"transcription": transcription})
+    json_merged_response = {**json.loads(summary), "transcription": transcription}
+    print("summary", summary)
+
+    return json_merged_response
 
 # sanity check endpoint to make sure the server is running
 @app.route("/ping", methods=["GET"])

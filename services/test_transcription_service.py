@@ -6,6 +6,7 @@ from transcription_service import transcribe_from_file, transcribe_from_youtube
 
 
 class TranscriptionServiceTests(unittest.TestCase):
+
     @patch("transcription_service.generate_transcription", return_value = "This is a test transcription")
     def test_transcribe_from_file(self, generate_transcription_mock):
         audio_file = MagicMock()
