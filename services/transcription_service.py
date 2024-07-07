@@ -22,7 +22,10 @@ def generate_transcription(filename):
 
 def transcribe_from_youtube(link):
     print("Downloading audio from YouTube link", link)
+    audio_file = download_audio_from_youtube(link)
+    return generate_transcription(audio_file)
+
+def download_audio_from_youtube(link):
     yt = YouTube(link)
     audio_file = yt.streams.filter(only_audio=True).first().download()
-
-    return generate_transcription(audio_file)
+    return audio_file
