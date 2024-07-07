@@ -1,11 +1,14 @@
-from flask import Flask, request, jsonify
 from faster_whisper import WhisperModel
-from pytube import YouTube
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import json
 
 from services import transcription_service, ollama_service
 
 app = Flask(__name__)
+app.config.from_object(__name__)
+
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 @app.route("/transcribe", methods=["POST"])
 def transcribe_audio():
