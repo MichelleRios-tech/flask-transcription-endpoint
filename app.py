@@ -1,9 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from controllers import transcribe_controller
-import json
-
-from services import transcription_service, ollama_service
 
 app = Flask(__name__)
 app.config.from_object(__name__)
