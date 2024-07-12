@@ -1,6 +1,7 @@
 from flask import jsonify
 import json
 
+from models import transcriptions
 from services import transcription_service, ollama_service
 
 
@@ -15,5 +16,18 @@ def transcribe_audio(request):
 
     summary = ollama_service.get_summary(transcription)
 
+    print(summary)
+
+    transcriptions.save_new_transcription(
+        {"transcription": transcription, **json.loads(summary), "link": audio_link}
+    )
+
     return {**json.loads(summary), "transcription": transcription}
 
+    # return jsonify(
+    #     {
+    #         "transcription": "This is a test transcription",
+    #         "summary": "This is a test summary",
+    #         "type": "type",
+    #     }
+    # )

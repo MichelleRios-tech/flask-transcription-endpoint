@@ -1,11 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from controllers import transcribe_controller
+from models import db_init
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
 CORS(app, resources={r'/*': {'origins': '*'}})
+
+db_init.init_transcriptions_db()
 
 
 @app.route("/transcribe", methods=["POST"])
