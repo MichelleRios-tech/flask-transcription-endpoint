@@ -15,6 +15,10 @@ db_init.init_transcriptions_db()
 def transcribe_audio():
     return transcribe_controller.transcribe_audio(request)
 
+@app.route("/transcriptions", methods=["GET"])
+def get_transcriptions():
+    return transcribe_controller.get_transcriptions()
+
 
 # sanity check endpoint to make sure the server is running
 @app.route("/ping", methods=["GET"])

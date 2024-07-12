@@ -24,6 +24,9 @@ def transcribe_audio(request):
 
     return {**json.loads(summary), "transcription": transcription}
 
+def get_transcriptions():
+    return jsonify(transcriptions.get_all_transcriptions())
+
     # return jsonify(
     #     {
     #         "transcription": "This is a test transcription",
